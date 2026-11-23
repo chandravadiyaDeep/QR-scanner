@@ -4,13 +4,11 @@ This service is the trusted backend for owner operations. Protected routes must 
 
 ## Local development
 
-From this directory:
+Run commands from the repository root:
 
 ```bash
-python -m venv .venv
-# Activate the virtual environment for your operating system.
 python -m pip install -e ".[dev]"
-uvicorn app.main:app --reload
+uvicorn app.main:app --app-dir services/api --reload
 pytest
 ```
 
