@@ -5,6 +5,11 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 Language = Literal["gu", "hi", "en"]
+RESERVED_SLUGS = {
+    "api", "admin", "auth", "login", "signup", "register", "settings",
+    "dashboard", "m", "menu", "menus", "public", "static", "assets",
+    "health", "ready", "docs", "openapi.json",
+}
 
 
 class ShopCreate(BaseModel):
@@ -17,6 +22,14 @@ class ShopCreate(BaseModel):
     enabled_languages: list[Language] = Field(default_factory=lambda: ["en"])
     phone: str | None = Field(default=None, max_length=30)
     address: str | None = Field(default=None, max_length=300)
+
+    @field_validator("slug")
+    @classmethod
+    def reject_reserved_slug(cls, value: str) -> str:
+        # Protect application routes and infrastructure endpoints from slug collisions.
+        if value in RESERVED_SLUGS:
+            raise ValueError("This slug is reserved")
+        return value
 
     @field_validator("enabled_languages")
     @classmethod
