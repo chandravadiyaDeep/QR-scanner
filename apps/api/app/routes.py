@@ -3,12 +3,11 @@ from uuid import UUID
 
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException, status
-from psycopg.rows import dict_row
 
 from app.auth import get_current_user
 from app.config import Settings, get_settings
 from app.db import get_connection
-from app.schemas import MeResponse, ShopCreate, ShopCreated, ShopSummary
+from app.schemas import MeResponse, ShopCreate, ShopCreateResponse, ShopCreated, ShopSummary
 
 router = APIRouter()
 
@@ -44,7 +43,7 @@ def me(
     return MeResponse(user_id=UUID(user["sub"]), shops=[ShopSummary(**row) for row in rows])
 
 
-@router.post("/shops", response_model=dict, status_code=status.HTTP_201_CREATED)
+@router.post("/shops", response_model=ShopCreateResponse, status_code=status.HTTP_201_CREATED)
 def create_shop(
     payload: ShopCreate,
     user: dict = Depends(get_current_user),
@@ -73,13 +72,14 @@ def create_shop(
             ).fetchone()
     except psycopg.errors.UniqueViolation as exc:
         # Slug collisions are a stable conflict response, not a database error leak.
-        raise HTTPException(status_code=409, detail={
-            "code": "SLUG_ALREADY_EXISTS", "message": "That public menu URL is unavailable."
-        }) from exc
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "SLUG_ALREADY_EXISTS", "message": "That public menu URL is unavailable."},
+        ) from exc
 
     result = ShopCreated(
         shop_id=shop["id"], menu_id=menu["id"], name=shop["name"], slug=shop["slug"],
         public_url=f"{str(settings.public_menu_base_url).rstrip('/')}/m/{shop['slug']}",
         is_published=bool(menu["is_published"]),
     )
-    return {"data": result.model_dump(mode="json")}
+    return ShopCreateResponse(data=result)
