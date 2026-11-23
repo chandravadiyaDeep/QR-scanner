@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 from app.config import get_settings
 from app.db import open_pool
-from app.routes import router
+from app.routes import router, system_router
 
 
 @asynccontextmanager
@@ -25,7 +25,7 @@ async def lifespan(app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    # OpenAPI is generated from the executable Pydantic request/response models.
+    # Keep operational health routes unversioned; business APIs remain under /api/v1.
     settings = get_settings()
     application = FastAPI(
         title="QR Digital Menu API",
@@ -33,6 +33,7 @@ def create_app() -> FastAPI:
         description="Trusted API for shop-owner management and public menu delivery.",
         lifespan=lifespan,
     )
+    application.include_router(system_router)
     application.include_router(router, prefix=settings.api_prefix)
     return application
 
