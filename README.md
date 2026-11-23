@@ -30,27 +30,28 @@ The engineering foundation is being built in milestone branch `milestone-1/engin
 
 ## Backend quick start
 
-Requirements: Python 3.12 or newer.
+Requirements: Python 3.12 or newer. Run these commands from the repository root:
 
 ```bash
-cd services/api
 python -m venv .venv
 # Windows PowerShell:
 .venv\Scripts\Activate.ps1
 # macOS/Linux:
 # source .venv/bin/activate
 python -m pip install -e ".[dev]"
-uvicorn app.main:app --reload
+uvicorn app.main:app --app-dir services/api --reload
 ```
 
 - Health: http://127.0.0.1:8000/api/v1/health
 - OpenAPI: http://127.0.0.1:8000/openapi.json
 - Swagger UI: http://127.0.0.1:8000/docs
 
-Run tests from `services/api`:
+Run tests and lint from the repository root:
 
 ```bash
 pytest
+ruff check services/api
+ruff format --check services/api
 ```
 
 ## Environment and secrets
