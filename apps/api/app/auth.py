@@ -1,6 +1,7 @@
 """Supabase access-token verification using the project's JWKS endpoint."""
 from functools import lru_cache
 from typing import Any
+from uuid import UUID
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -44,10 +45,8 @@ def get_current_user(
             options={"require": ["exp", "iat", "sub", "iss", "aud"]},
         )
         # Supabase user IDs are UUIDs; reject malformed subjects before database access.
-        from uuid import UUID
-
         claims["sub"] = str(UUID(claims["sub"]))
         return claims
-    except (jwt.PyJWTError, ValueError, TypeError, Exception) as exc:
+    except Exception as exc:
         # Do not expose key-fetch details, JWT contents, or cryptographic errors.
         raise unauthorized from exc
