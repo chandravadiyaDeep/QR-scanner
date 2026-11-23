@@ -23,3 +23,9 @@ def test_duplicate_languages_are_rejected():
     # Duplicate codes create ambiguous language settings and must fail validation.
     with pytest.raises(ValidationError):
         ShopCreate(name="Shree Snacks", slug="shree-snacks", enabled_languages=["en", "en"])
+
+
+def test_reserved_slug_is_rejected():
+    # Reserve infrastructure and route names so public shop URLs cannot shadow app routes.
+    with pytest.raises(ValidationError):
+        ShopCreate(name="Example Shop", slug="admin")
