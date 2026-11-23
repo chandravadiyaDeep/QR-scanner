@@ -43,6 +43,11 @@ class ShopCreated(BaseModel):
     is_published: bool = False
 
 
+class ShopCreateResponse(BaseModel):
+    # Keep the API envelope typed so OpenAPI documents the exact onboarding response.
+    data: ShopCreated
+
+
 class ShopSummary(BaseModel):
     shop_id: UUID
     shop_name: str
