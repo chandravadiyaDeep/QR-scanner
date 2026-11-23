@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "qr-digital-menu-api"
 version = "0.1.0"
@@ -15,6 +19,13 @@ dev = [
   "pytest>=8.3,<9.0",
   "ruff>=0.7,<1.0",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "services/api"}
+
+[tool.setuptools.packages.find]
+where = ["services/api"]
+include = ["app*"]
 
 [tool.pytest.ini_options]
 testpaths = ["services/api/tests"]
