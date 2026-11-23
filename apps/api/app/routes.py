@@ -10,15 +10,16 @@ from app.db import get_connection
 from app.schemas import MeResponse, ShopCreate, ShopCreateResponse, ShopCreated, ShopSummary
 
 router = APIRouter()
+system_router = APIRouter()
 
 
-@router.get("/health")
+@system_router.get("/health")
 def health() -> dict[str, str]:
     # Liveness only; never disclose dependency credentials or configuration.
     return {"status": "ok"}
 
 
-@router.get("/ready")
+@system_router.get("/ready")
 def ready(connection: psycopg.Connection = Depends(get_connection)) -> dict[str, str]:
     # Readiness checks database connectivity without returning internal details.
     connection.execute("select 1")
