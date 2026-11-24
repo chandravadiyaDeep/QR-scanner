@@ -467,3 +467,12 @@ Do not invent test-session URLs. Generate and publish the actual session links o
 - **Verification:** Workflow run #45434864729 was started for SHA `a2d95ccb77f325c67a150b0`; at documentation time it was still in progress, so no build/test result or APK artifact is claimed.
 - **Current state:** Android foundation exists on a feature branch; full owner-app scope and both cloud testing uploads remain incomplete.
 - **Next action:** Inspect Android CI result, fix all failures through GitHub commits, then implement remaining owner workflows and backend contracts before dual-service testing.
+
+
+### Follow-up CI repair log — 2026-11-24
+
+- **Task:** Fix the first Android CI failure so the new Flutter project can progress to tests and APK generation.
+- **Changes:** The first CI run (#45434864729) failed at static analysis because Flutter 3.50.1 and the resolved Supabase SDK reported three deprecation diagnostics. Updated the Flutter Material import, Supabase initialization to `publishableKey`, and the dropdown field to `initialValue` in `apps/owner_android/lib/main.dart`.
+- **Verification:** Fix commit `bed1e6bf2863513bd9a426200b917606a28fafb1` pushed to the Android feature branch. A fresh push workflow run #45435084459 was created for that exact SHA; it was still running at the time of this log. No passing result or APK artifact is claimed yet.
+- **Current state:** The first CI issue has a targeted code fix; re-analysis, widget tests, and APK build are pending verification.
+- **Next action:** Check run #45435084459; fix any further failures via GitHub, then continue implementing the complete owner app and backend features.
