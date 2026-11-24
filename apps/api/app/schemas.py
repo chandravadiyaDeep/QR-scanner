@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 Language = Literal["gu", "hi", "en"]
+ShopRole = Literal["owner", "editor", "viewer"]
 RESERVED_SLUGS = {
     "api", "admin", "auth", "login", "signup", "register", "settings",
     "dashboard", "m", "menu", "menus", "public", "static", "assets",
@@ -19,7 +20,10 @@ class ShopCreate(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     slug: str = Field(min_length=3, max_length=70, pattern=r"^[a-z0-9]+(-[a-z0-9]+)*$")
     default_language: Language = "en"
-    enabled_languages: list[Language] = Field(default_factory=lambda: ["en"])
+    # Match the database constraint at the API boundary to return a clear 422 response.
+    enabled_languages: list[Language] = Field(
+        default_factory=lambda: ["en"], min_length=1, max_length=3
+    )
     phone: str | None = Field(default=None, max_length=30)
     address: str | None = Field(default=None, max_length=300)
 
@@ -64,7 +68,7 @@ class ShopCreateResponse(BaseModel):
 class ShopSummary(BaseModel):
     shop_id: UUID
     shop_name: str
-    role: str
+    role: ShopRole
     slug: str
     is_published: bool
 
