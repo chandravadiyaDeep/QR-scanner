@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from app.auth import get_current_user
 from app.config import Settings, get_settings
 from app.db import get_connection
-from app.schemas import MeResponse, ShopCreate, ShopCreateResponse, ShopCreated, ShopSummary
+from app.schemas import MeResponse, ShopCreate, ShopCreated, ShopCreateResponse, ShopSummary
 
 router = APIRouter()
 system_router = APIRouter()
@@ -59,8 +59,14 @@ def create_shop(
                    (name, slug, phone, address, default_language, enabled_languages)
                    values (%s, %s, %s, %s, %s, %s)
                    returning id, name, slug, is_published""",
-                (payload.name, payload.slug, payload.phone, payload.address,
-                 payload.default_language, payload.enabled_languages),
+                (
+                    payload.name,
+                    payload.slug,
+                    payload.phone,
+                    payload.address,
+                    payload.default_language,
+                    payload.enabled_languages,
+                ),
             ).fetchone()
             connection.execute(
                 "insert into public.shop_members (shop_id, user_id, role) values (%s, %s, 'owner')",
@@ -79,7 +85,10 @@ def create_shop(
         ) from exc
 
     result = ShopCreated(
-        shop_id=shop["id"], menu_id=menu["id"], name=shop["name"], slug=shop["slug"],
+        shop_id=shop["id"],
+        menu_id=menu["id"],
+        name=shop["name"],
+        slug=shop["slug"],
         public_url=f"{str(settings.public_menu_base_url).rstrip('/')}/m/{shop['slug']}",
         is_published=bool(menu["is_published"]),
     )
