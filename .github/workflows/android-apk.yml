@@ -1,0 +1,58 @@
+name: Android APK
+
+on:
+  push:
+    branches:
+      - feat/flutter-owner-app-foundation
+  pull_request:
+    paths:
+      - "apps/owner_android/**"
+      - ".github/workflows/android-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Analyze, test, and build Android APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/owner_android
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate Android platform scaffolding
+        run: flutter create --platforms=android --project-name qr_digital_menu_owner --org com.qrdigitalmenu --no-pub .
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze --fatal-infos
+
+      - name: Widget tests
+        run: flutter test
+
+      - name: Build release APK
+        run: |
+          flutter build apk --release \
+            --dart-define=SUPABASE_URL="${{ secrets.SUPABASE_URL }}" \
+            --dart-define=SUPABASE_ANON_KEY="${{ secrets.SUPABASE_ANON_KEY }}" \
+            --dart-define=API_BASE_URL="${{ secrets.API_BASE_URL }}"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qr-digital-menu-android-apk
+          path: apps/owner_android/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
