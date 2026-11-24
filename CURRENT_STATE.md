@@ -476,3 +476,12 @@ Do not invent test-session URLs. Generate and publish the actual session links o
 - **Verification:** Fix commit `bed1e6bf2863513bd9a426200b917606a28fafb1` pushed to the Android feature branch. A fresh push workflow run #45435084459 was created for that exact SHA; it was still running at the time of this log. No passing result or APK artifact is claimed yet.
 - **Current state:** The first CI issue has a targeted code fix; re-analysis, widget tests, and APK build are pending verification.
 - **Next action:** Check run #45435084459; fix any further failures via GitHub, then continue implementing the complete owner app and backend features.
+
+
+### Android build workflow hardening — 2026-11-24
+
+- **Task:** Make the GitHub-only Android build reproducible without requiring the Product Owner to open an IDE or generate native Android files locally.
+- **Changes:** Updated `.github/workflows/android-apk.yml` to generate the Android platform scaffold with Flutter in the GitHub Actions runner before dependency installation and build. Latest known PR #44 head is `0aa50d5e1a191dd4af82302081601dd4a8308f00`.
+- **Verification:** Flutter setup and dependency installation succeeded on the initial run, but the first static-analysis attempt failed on three deprecation diagnostics. Those diagnostics were corrected in `bed1e6bf2863513bd9a426200b917606a28fafb1`. Workflow runs #45435084459 and #45435096061 were still marked in progress at the last check and did not yet provide a verified APK artifact. The latest workflow commit still needs its own green run.
+- **Current state:** No complete APK or Appetize/BrowserStack test link exists yet. Android feature PR #44 remains draft.
+- **Next action:** Verify the newest CI run against the latest branch head, resolve any scaffold/build/runtime errors, and then continue the full feature implementation.
