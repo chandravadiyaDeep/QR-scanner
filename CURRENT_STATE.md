@@ -369,3 +369,19 @@ When the user says **"Read CURRENT_STATE.md and continue"**:
 6. After the task, update this file with the new verified state and provide the required 4–5-line progress report.
 
 **The goal is continuity without project drift:** every new session should know what we are building, why we are building it, what has actually been implemented, what is verified, what is still pending, and the safest next step.
+
+
+---
+
+## 11. Progress log — 2026-11-24
+
+### Online Android APK testing requirement confirmed by Product Owner
+
+- **Task:** The Product Owner confirmed the repository is cloned locally and made a final delivery requirement: once the Flutter Android app is implemented, produce an APK and make it available through an online environment for interactive testing.
+- **Purpose:** Enable testing through a browser-hosted Android device rather than relying only on screenshots, local builds, or CI results.
+- **Verified repository state:** The current feature branch contains `apps/api` only. No Flutter owner-app source directory, Android Gradle project, or APK build currently exists. Therefore there is no genuine app binary to upload at this stage.
+- **Testing target distinction:** Appetize can run an uploaded APK in a browser-hosted virtual device; BrowserStack App Live supports interactive testing on cloud-hosted real Android devices and accepts APK uploads. These are not equivalent: browser emulator preview is not physical-device verification. Check current plan limits/pricing before selecting a paid service.
+- **Delivery approach:** After the owner app exists, add a reproducible GitHub Actions APK build, retain a downloadable build artifact/release, then connect an approved online test service. Do not publish placeholder APKs or claim an upload/test succeeded without a real build and session evidence.
+- **User setup dependency:** Any external testing-service account/API token must be configured by the Product Owner as a GitHub Actions secret or entered directly in that service; never send the token in chat.
+- **Current state:** Online APK testing is now an explicit delivery acceptance requirement, but app implementation and APK generation remain pending. PR #43 live Supabase authentication and tenant-isolation verification remain the immediate milestone gate.
+- **Next action:** Continue the planned PR #43 live verification using the cloned Windows repository and the two existing Supabase test accounts. After that milestone is accepted, implement the Flutter owner app and its APK build/test delivery pipeline in dependency order.
