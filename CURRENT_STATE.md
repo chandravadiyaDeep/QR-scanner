@@ -385,3 +385,85 @@ When the user says **"Read CURRENT_STATE.md and continue"**:
 - **User setup dependency:** Any external testing-service account/API token must be configured by the Product Owner as a GitHub Actions secret or entered directly in that service; never send the token in chat.
 - **Current state:** Online APK testing is now an explicit delivery acceptance requirement, but app implementation and APK generation remain pending. PR #43 live Supabase authentication and tenant-isolation verification remain the immediate milestone gate.
 - **Next action:** Continue the planned PR #43 live verification using the cloned Windows repository and the two existing Supabase test accounts. After that milestone is accepted, implement the Flutter owner app and its APK build/test delivery pipeline in dependency order.
+
+
+---
+
+## 12. Android owner-app implementation — 2026-11-24
+
+### Product Owner's delivery instruction
+
+The Product Owner explicitly requested that all implementation, build, release, and test preparation be performed through GitHub. Do not require the Product Owner to use VS Code or run local commands for routine development. Continue using GitHub branches, pull requests, and GitHub Actions. The Product Owner also requires the same verified APK to be tested through both Appetize and BrowserStack App Live before delivery.
+
+### Android foundation branch and PR
+
+- **Branch:** `feat/flutter-owner-app-foundation`
+- **Base:** `feat/milestone-1-backend-foundation` (keeps the mobile work dependent on the current backend foundation PR #43)
+- **PR:** [#44 — Android owner app foundation and automated APK pipeline](https://github.com/chandravadiyaDeep/QR-scanner/pull/44)
+- **Current PR state:** Open, draft, not merged.
+- **Recorded branch head at this update:** `a2d95ccb77f325a8473868c2deff10069f8e0e91`
+
+### Implemented in the first Android foundation commit set
+
+- Flutter project created at `apps/owner_android`.
+- Dark mobile-first owner-app shell.
+- Supabase email/password registration and sign-in UI.
+- Authenticated shop list loading through `GET /api/v1/me`.
+- Shop onboarding through `POST /api/v1/shops`, matching the currently implemented API schema.
+- Safe unconfigured state so an APK can still compile without embedding credentials.
+- GitHub Actions workflow `.github/workflows/android-apk.yml` to install Flutter, fetch dependencies, analyze, run widget tests, build a release APK, and retain it as a 14-day workflow artifact.
+
+### Current Android CI state
+
+- Workflow: **Android APK**
+- Run: [45434864729](https://github.com/chandravadiyaDeep/QR-scanner/actions/runs/45434864729)
+- Run #1 for branch head `a2d95ccb77f325a8473868c2deff10069f8e0e91`.
+- At the time of this update, GitHub Actions had started the Flutter setup step; dependency installation, analysis, tests, APK build, and artifact upload were not yet confirmed.
+- Do not describe an APK as built or tested until the workflow succeeds and the artifact is present.
+
+### Important incomplete work
+
+This is a foundation only, not the complete combined MVP + V1 owner app. The following remain unimplemented:
+- Shop profile edit and settings.
+- Category create/list/update/delete/reordering.
+- Menu item create/list/update/archive, price, availability, and ordering.
+- Image upload integration.
+- Draft preview and publish/unpublish controls.
+- QR generation, PNG export, and device/WhatsApp sharing.
+- Translation editor for Gujarati, Hindi, and English.
+- Branding and theme selection.
+- Analytics dashboard.
+- Public customer menu web app and end-to-end QR scan.
+- Complete API endpoints and backend integration tests for those flows.
+- Full automated/widget/integration tests and real-device regression.
+
+### Appetize and BrowserStack dual-testing requirement
+
+The release target is to upload the same final, verified release APK to both:
+1. **Appetize:** browser-hosted Android app preview/test session.
+2. **BrowserStack App Live:** interactive testing on cloud-hosted real Android devices.
+
+The current repository workflow does not yet upload to either service. Before automated upload can be enabled, the Product Owner must configure credentials privately in GitHub Actions repository secrets (never in chat):
+- Appetize API token, following the current Appetize upload API.
+- BrowserStack username and access key, following the current App Live/App Automate app-upload API.
+
+Do not invent test-session URLs. Generate and publish the actual session links only after successful upload and session creation. Verify whether the user's selected service plans support the required upload/session duration and device features.
+
+### Next implementation order
+
+1. Verify and repair Android foundation CI until analyze, widget tests, and APK build all pass.
+2. Add API endpoints and Flutter screens for shop settings, categories, and items.
+3. Add storage uploads, preview/publish, public menu API and Next.js customer route.
+4. Add QR generation/export/share, translations, themes, and analytics.
+5. Add comprehensive API, widget, integration, browser, and real-device regression checks.
+6. Add dual Appetize + BrowserStack upload/session automation using private GitHub secrets.
+7. Publish one versioned release APK and provide both verified test links.
+8. Keep PRs draft until acceptance tests pass; do not claim full release readiness prematurely.
+
+### Progress report — 2026-11-24
+
+- **Task:** Started Android owner-app implementation entirely through GitHub, honoring the Product Owner's no-local-IDE instruction and dual online testing requirement.
+- **Changes:** Added Flutter project, Supabase sign-in/register, authenticated shop listing/onboarding, widget smoke test, and GitHub Actions APK build workflow; opened draft PR #44.
+- **Verification:** Workflow run #45434864729 was started for SHA `a2d95ccb77f325c67a150b0`; at documentation time it was still in progress, so no build/test result or APK artifact is claimed.
+- **Current state:** Android foundation exists on a feature branch; full owner-app scope and both cloud testing uploads remain incomplete.
+- **Next action:** Inspect Android CI result, fix all failures through GitHub commits, then implement remaining owner workflows and backend contracts before dual-service testing.
