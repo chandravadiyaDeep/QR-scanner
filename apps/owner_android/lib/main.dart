@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,7 +19,7 @@ Future<void> main() async {
 
   // Avoid crashing an installable preview build when deployment secrets are not configured.
   if (hasPublicConfig) {
-    await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
+    await Supabase.initialize(url: supabaseUrl, publishableKey: supabaseAnonKey);
   }
 
   runApp(const QrDigitalMenuApp());
@@ -411,7 +411,7 @@ class _CreateShopDialogState extends State<CreateShopDialog> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: _language,
+              initialValue: _language,
               decoration: const InputDecoration(labelText: 'Default language'),
               items: const [
                 DropdownMenuItem(value: 'en', child: Text('English')),
