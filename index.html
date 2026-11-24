@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d19">
+  <meta name="description" content="QR Digital Menu helps local shops create, update and share beautiful digital menus. Customers scan a QR code and open the menu in any browser.">
+  <title>QR Menu — Your menu. One scan away.</title>
+  <style>
+    /* QR Menu project portal — responsive, dependency-free GitHub Pages site. */
+    :root {
+      color-scheme: dark;
+      --bg: #080d19;
+      --surface: #101a2b;
+      --surface-2: #14223a;
+      --line: rgba(148, 174, 214, .16);
+      --text: #f3f7ff;
+      --muted: #9eacc2;
+      --blue: #5b9dff;
+      --cyan: #59d5e8;
+      --green: #74e0b0;
+      --radius: 22px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 75% 0%, rgba(42, 105, 205, .19), transparent 35rem),
+        radial-gradient(ellipse at 0% 42%, rgba(40, 154, 181, .08), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .nav-shell { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(18px); background: rgba(8,13,25,.78); border-bottom: 1px solid var(--line); }
+    nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: -.03em; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: linear-gradient(145deg, #69a9ff, #3470d4); box-shadow: 0 8px 28px rgba(55,124,224,.3); }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; line-height: 1.2; }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 13px; font-weight: 650; }
+    .nav-links a:hover { color: var(--text); }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 19px; border: 1px solid transparent; border-radius: 13px; font: inherit; font-size: 14px; font-weight: 750; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; cursor: pointer; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #06101f; background: linear-gradient(110deg, #76b4ff, #5bd2e3); box-shadow: 0 12px 32px rgba(63,148,220,.2); }
+    .button-secondary { border-color: var(--line); background: rgba(255,255,255,.035); color: var(--text); }
+    .button-disabled { cursor: not-allowed; color: #b7c5d9; background: #25344a; border-color: rgba(255,255,255,.07); }
+    .button-disabled:hover { transform: none; box-shadow: none; }
+    .hero { padding: 96px 0 86px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 54px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #a9d5ff; background: rgba(76,151,255,.1); border: 1px solid rgba(96,165,250,.23); border-radius: 999px; padding: 7px 12px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 14px var(--green); }
+    h1 { margin: 22px 0 20px; max-width: 680px; font-size: clamp(46px, 6.2vw, 76px); line-height: 1.03; letter-spacing: -.065em; }
+    .gradient-text { background: linear-gradient(100deg, #f5f8ff 8%, #7bb7ff 55%, #67dce7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-copy { max-width: 570px; color: var(--muted); font-size: 17px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .fine-print { margin-top: 15px; color: #7f90a9; font-size: 12px; }
+    .visual { position: relative; min-height: 420px; display: grid; place-items: center; }
+    .glow { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: rgba(54,131,231,.22); filter: blur(65px); }
+    .phone { position: relative; width: 246px; padding: 11px; border: 1px solid rgba(172,204,255,.28); border-radius: 34px; background: linear-gradient(145deg, #243752, #0e1728 55%); box-shadow: 0 35px 90px rgba(0,0,0,.48), inset 0 1px rgba(255,255,255,.15); transform: rotate(5deg); animation: float 6s ease-in-out infinite; }
+    .phone-screen { min-height: 380px; border-radius: 25px; padding: 19px 15px; background: linear-gradient(180deg, #f7f9ff, #e9f0fb); color: #13233b; overflow: hidden; }
+    .screen-top { display: flex; align-items: center; justify-content: space-between; font-size: 9px; color: #71829a; font-weight: 800; }
+    .shop-avatar { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; color: white; background: linear-gradient(140deg,#ffb36b,#e66b4b); font-size: 19px; margin-top: 20px; }
+    .screen-title { font-size: 21px; line-height: 1.1; font-weight: 850; letter-spacing: -.04em; margin-top: 10px; }
+    .screen-sub { color: #75859c; font-size: 9px; margin-top: 4px; }
+    .screen-tabs { display: flex; gap: 6px; margin: 19px 0 14px; }
+    .screen-tabs span { font-size: 8px; padding: 6px 9px; border-radius: 20px; background: #dce7f7; color: #53647c; font-weight: 800; }
+    .screen-tabs span:first-child { background: #1d5fb9; color: white; }
+    .food { display: flex; align-items: center; gap: 9px; padding: 9px; background: white; border-radius: 13px; margin-top: 8px; box-shadow: 0 4px 12px rgba(25,54,90,.05); }
+    .food-thumb { width: 42px; height: 42px; flex: 0 0 auto; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg,#f7d8a5,#e9a76d); font-size: 21px; }
+    .food:nth-of-type(2) .food-thumb { background: linear-gradient(135deg,#b6e3c9,#65b88d); }
+    .food:nth-of-type(3) .food-thumb { background: linear-gradient(135deg,#f4c2b8,#d97d6d); }
+    .food-info { flex: 1; min-width: 0; }
+    .food-info b { display: block; font-size: 9px; }
+    .food-info small { color: #8b99aa; font-size: 7px; }
+    .food-price { font-size: 9px; font-weight: 850; }
+    .scan-card { position: absolute; right: -5px; bottom: 42px; width: 170px; padding: 15px; border: 1px solid rgba(156,190,236,.2); border-radius: 18px; background: rgba(18,31,51,.88); box-shadow: 0 20px 55px rgba(0,0,0,.28); backdrop-filter: blur(14px); transform: rotate(-5deg); }
+    .qr-grid { width: 58px; height: 58px; padding: 5px; border-radius: 8px; background: white; display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; margin-bottom: 10px; }
+    .qr-grid i { background: #14223a; border-radius: 1px; }
+    .qr-grid i:nth-child(3n), .qr-grid i:nth-child(7n) { background: transparent; }
+    .scan-card b { display: block; font-size: 11px; }
+    .scan-card small { color: var(--muted); font-size: 9px; }
+    section { padding: 78px 0; }
+    .section-head { max-width: 680px; margin-bottom: 32px; }
+    .kicker { color: var(--cyan); font-size: 11px; letter-spacing: .15em; font-weight: 850; text-transform: uppercase; }
+    h2 { margin: 10px 0 12px; font-size: clamp(30px,4vw,45px); line-height: 1.12; letter-spacing: -.045em; }
+    .section-head p { color: var(--muted); margin: 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .card { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, rgba(22,36,59,.9), rgba(14,23,39,.8)); }
+    .icon-box { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; background: rgba(91,157,255,.13); color: #8bbcff; font-size: 20px; }
+    .card h3 { margin: 17px 0 7px; font-size: 17px; letter-spacing: -.02em; }
+    .card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; counter-reset: step; }
+    .step { padding: 21px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.025); counter-increment: step; }
+    .step:before { content: "0" counter(step); color: var(--cyan); font-size: 12px; font-weight: 900; letter-spacing: .1em; }
+    .step h3 { margin: 12px 0 6px; font-size: 15px; }
+    .step p { margin: 0; color: var(--muted); font-size: 12px; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .panel { padding: 28px; border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(145deg, rgba(20,34,57,.88), rgba(12,21,36,.88)); }
+    .panel-label { color: var(--cyan); font-size: 10px; letter-spacing: .14em; font-weight: 850; text-transform: uppercase; }
+    .panel h3 { margin: 9px 0; font-size: 22px; }
+    .panel p { color: var(--muted); font-size: 13px; }
+    .check-list { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 11px; }
+    .check-list li { display: flex; gap: 10px; color: #c9d5e6; font-size: 13px; }
+    .check-list li:before { content: "✓"; color: var(--green); font-weight: 900; }
+    .languages { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .language { padding: 7px 11px; border: 1px solid var(--line); border-radius: 10px; color: #d5e4f7; font-size: 12px; font-weight: 750; }
+    .status { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid rgba(116,224,176,.22); border-radius: 99px; color: #9ceac6; background: rgba(116,224,176,.07); font-size: 10px; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; }
+    .download-panel { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 28px; padding: 36px; border: 1px solid rgba(102,170,255,.25); border-radius: 28px; background: radial-gradient(circle at 85% 20%, rgba(73,140,230,.19), transparent 24rem), linear-gradient(135deg,#13243d,#0d1729); }
+    .download-panel h2 { margin-top: 12px; }
+    .download-panel p { max-width: 620px; color: var(--muted); font-size: 14px; }
+    .release-note { margin-top: 12px; color: #8495ad; font-size: 11px; }
+    .faq { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    details { padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.025); }
+    summary { cursor: pointer; font-size: 13px; font-weight: 750; }
+    details p { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+    footer { padding: 30px 0 42px; border-top: 1px solid var(--line); color: #8191a8; font-size: 11px; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 18px; }
+    .footer-links a:hover { color: var(--text); }
+    .reveal { animation: rise .7s both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes float { 0%,100% { transform: rotate(5deg) translateY(0); } 50% { transform: rotate(3deg) translateY(-12px); } }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; gap: 20px; padding-top: 70px; }
+      .visual { min-height: 390px; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .nav-links { gap: 14px; }
+      .nav-links a:not(.button) { display: none; }
+    }
+    @media (max-width: 600px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      nav { min-height: 66px; }
+      .nav-links .button { min-height: 40px; padding: 0 12px; font-size: 12px; }
+      .hero { padding: 58px 0 42px; }
+      h1 { font-size: clamp(43px, 13vw, 60px); }
+      .hero-copy { font-size: 15px; }
+      .visual { min-height: 360px; }
+      .phone { width: 218px; }
+      .phone-screen { min-height: 350px; }
+      .scan-card { right: 0; bottom: 24px; }
+      section { padding: 56px 0; }
+      .grid-3, .split, .faq { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .card { padding: 20px; }
+      .download-panel { grid-template-columns: 1fr; padding: 25px; }
+      .download-panel .button { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-shell">
+    <nav class="wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="QR Menu home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v6h-6v-2"/></svg>
+        </span>
+        <span>QR MENU<small>Digital menu platform</small></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a class="button button-secondary" href="https://github.com/chandravadiyaDeep/QR-scanner" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </nav>
+  </div>
+
+  <main id="top">
+    <header class="wrap hero">
+      <div class="reveal">
+        <span class="eyebrow"><span class="dot"></span> Built for local businesses</span>
+        <h1>Your menu.<br><span class="gradient-text">One scan away.</span></h1>
+        <p class="hero-copy">Create a beautiful digital menu for your shop. Update prices and availability whenever you need. Your customers scan a QR code and open the menu instantly in their browser.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#download">Get the Android app <span aria-hidden="true">↓</span></a>
+          <a class="button button-secondary" href="#how-it-works">Explore the project <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="fine-print">No app installation or account needed for your customers. The owner app is in development.</p>
+      </div>
+      <div class="visual" aria-label="Illustration of a digital menu on a phone and a QR code">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="screen-top"><span>9:41</span><span>● ● ●</span></div>
+            <div class="shop-avatar">✦</div>
+            <div class="screen-title">The Daily Table</div>
+            <div class="screen-sub">Fresh food · Made with care</div>
+            <div class="screen-tabs"><span>Popular</span><span>Snacks</span><span>Drinks</span></div>
+            <div class="food"><div class="food-thumb">🥪</div><div class="food-info"><b>Grilled Sandwich</b><small>Fresh & crispy</small></div><div class="food-price">₹120</div></div>
+            <div class="food"><div class="food-thumb">🥗</div><div class="food-info"><b>Garden Salad</b><small>Light and fresh</small></div><div class="food-price">₹150</div></div>
+            <div class="food"><div class="food-thumb">🍹</div><div class="food-info"><b>Fresh Lime</b><small>Sweet or salted</small></div><div class="food-price">₹60</div></div>
+          </div>
+        </div>
+        <div class="scan-card">
+          <div class="qr-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <b>Scan. Open. Browse.</b><small>A simple menu experience for every customer.</small>
+        </div>
+      </div>
+    </header>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">The product</span>
+          <h2>Everything your digital menu needs.</h2>
+          <p>The first release is designed around two simple experiences: a management app for shop owners and a fast public menu for customers.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card"><div class="icon-box">✎</div><h3>Easy menu management</h3><p>Create categories and items. Edit descriptions, prices, images and availability from the owner app.</p></article>
+          <article class="card"><div class="icon-box">⌗</div><h3>QR code sharing</h3><p>Generate a QR code for your stable public menu link. Download it, print it or share it with customers.</p></article>
+          <article class="card"><div class="icon-box">◉</div><h3>Customer-friendly web menu</h3><p>Customers open the menu in their phone browser. No app install, registration or customer account required.</p></article>
+          <article class="card"><div class="icon-box">文</div><h3>Three languages</h3><p>Support Gujarati, Hindi and English with shop-provided translations and sensible language fallback.</p></article>
+          <article class="card"><div class="icon-box">✦</div><h3>Your shop's identity</h3><p>Use your shop name, logo, brand colors and menu themes to create a recognizable experience.</p></article>
+          <article class="card"><div class="icon-box">↗</div><h3>Useful insights</h3><p>See basic menu-view activity through privacy-conscious aggregated analytics.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Simple by design</span>
+          <h2>From shop setup to customer scan.</h2>
+          <p>The owner controls the menu. Customers get a simple browser experience.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><h3>Create your shop</h3><p>Register in the Android owner app and set up your shop profile.</p></article>
+          <article class="step"><h3>Build your menu</h3><p>Add categories, items, prices, photos and available languages.</p></article>
+          <article class="step"><h3>Publish and share</h3><p>Publish your menu and generate its QR code and permanent link.</p></article>
+          <article class="step"><h3>Customers scan</h3><p>Customers scan the code and browse the latest menu in any browser.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experiences">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Two experiences, one platform</span>
+          <h2>Made for owners. Effortless for customers.</h2>
+        </div>
+        <div class="split">
+          <article class="panel">
+            <span class="panel-label">For shop owners · Android app</span>
+            <h3>Your menu, in your hands.</h3>
+            <p>Manage your shop's digital menu from one place. Keep the menu current without reprinting a QR code every time something changes.</p>
+            <ul class="check-list"><li>Shop profile and menu editor</li><li>Categories, items, prices and availability</li><li>Images, branding and themes</li><li>Gujarati, Hindi and English content</li><li>QR download, sharing and menu insights</li></ul>
+          </article>
+          <article class="panel">
+            <span class="panel-label">For customers · Any browser</span>
+            <h3>Scan and start browsing.</h3>
+            <p>No extra app, no registration and no checkout steps. Just a fast, mobile-friendly menu that opens from the QR code.</p>
+            <ul class="check-list"><li>Works in Android and iPhone browsers</li><li>Shop details, categories and menu items</li><li>Prices, photos and availability</li><li>Available language selection</li><li>Shareable, stable HTTPS menu link</li></ul>
+            <div class="languages"><span class="language">ગુજરાતી · Gujarati</span><span class="language">हिन्दी · Hindi</span><span class="language">English</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <div class="wrap">
+        <div class="download-panel">
+          <div>
+            <span class="status"><span class="dot"></span> Android app in development</span>
+            <h2>Get ready to manage your menu.</h2>
+            <p>The Android owner app is being built. The APK download will become available here when a tested release is published. We will use this same page for future app updates.</p>
+            <div class="release-note">Release channel: GitHub Releases · Package: Android APK</div>
+          </div>
+          <div>
+            <a class="button button-disabled" aria-disabled="true" title="The APK has not been released yet">APK coming soon</a>
+            <p class="release-note"><a href="https://github.com/chandravadiyaDeep/QR-scanner/releases" target="_blank" rel="noopener">View release announcements ↗</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="project">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Project principles</span>
+          <h2>Simple, stable and privacy-conscious.</h2>
+          <p>We are building the product around reliable QR links, secure shop ownership and a customer menu that stays easy to access.</p>
+        </div>
+        <div class="grid-3">
+          <article class="card"><div class="icon-box">↻</div><h3>One stable QR link</h3><p>Changing a price, photo or theme should not force a shop to print a new QR code.</p></article>
+          <article class="card"><div class="icon-box">◇</div><h3>Shop data stays protected</h3><p>Owner actions are authenticated and shop-scoped. Public customers only receive published menu information.</p></article>
+          <article class="card"><div class="icon-box">♡</div><h3>Free-access commitment</h3><p>The combined first-release feature set is planned to remain free for shops until the 10,000-shop adoption milestone.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="kicker">Questions</span>
+          <h2>Good to know.</h2>
+        </div>
+        <div class="faq">
+          <details><summary>Do customers need to install the app?</summary><p>No. The Android app is for shop owners and staff. Customers scan the QR code and open the menu in their normal phone browser.</p></details>
+          <details><summary>Will the QR code change when I update my menu?</summary><p>No. The QR code points to a stable public HTTPS URL. Normal menu edits should not change that URL.</p></details>
+          <details><summary>Which languages are planned?</summary><p>Gujarati, Hindi and English. Shop owners provide translations for their menu content; missing translations fall back to the default language.</p></details>
+          <details><summary>Can customers order or pay through the menu?</summary><p>Not in the current release. The first release focuses on digital menu management and browsing. Ordering and payments are outside the approved scope.</p></details>
+          <details><summary>When can I download the Android APK?</summary><p>The owner app is still in development. The download button will be activated after a tested APK is published in GitHub Releases.</p></details>
+          <details><summary>Where can I follow development?</summary><p>Visit the project's GitHub repository to see implementation progress, issues and release announcements.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <div>© <span id="year"></span> QR Menu. Built for local shops.</div>
+      <div class="footer-links"><a href="https://github.com/chandravadiyaDeep/QR-scanner" target="_blank" rel="noopener">Source code ↗</a><a href="https://github.com/chandravadiyaDeep/QR-scanner/issues" target="_blank" rel="noopener">Feedback ↗</a><a href="#top">Back to top ↑</a></div>
+    </div>
+  </footer>
+  <script>
+    // Keep the footer year current without requiring a build step.
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
