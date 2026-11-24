@@ -30,6 +30,9 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Generate Android platform scaffolding
+        run: flutter create --platforms=android --project-name qr_digital_menu_owner --org com.qrdigitalmenu --no-pub .
+
       - name: Install dependencies
         run: flutter pub get
 
