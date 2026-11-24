@@ -485,3 +485,12 @@ Do not invent test-session URLs. Generate and publish the actual session links o
 - **Verification:** Flutter setup and dependency installation succeeded on the initial run, but the first static-analysis attempt failed on three deprecation diagnostics. Those diagnostics were corrected in `bed1e6bf2863513bd9a426200b917606a28fafb1`. Workflow runs #45435084459 and #45435096061 were still marked in progress at the last check and did not yet provide a verified APK artifact. The latest workflow commit still needs its own green run.
 - **Current state:** No complete APK or Appetize/BrowserStack test link exists yet. Android feature PR #44 remains draft.
 - **Next action:** Verify the newest CI run against the latest branch head, resolve any scaffold/build/runtime errors, and then continue the full feature implementation.
+
+
+### PR #44 CI diagnosis and repair — 2026-11-24
+
+- **Task:** Investigate the red checks shown on draft PR #44 and correct the root cause using GitHub-only changes.
+- **Changes:** Latest CI logs showed the Flutter SDK import in `apps/owner_android/lib/main.dart` pointed to the nonexistent package `material_ui`, causing cascading unresolved Flutter widget/type errors (238 analyzer issues). Restored the official Flutter SDK import `package:flutter/material.dart`.
+- **Verification:** Fix committed to `feat/flutter-owner-app-foundation` as `a4a0d232003be67e9abae9547d00aadc3fce9c21`. The failed run was #6 for the previous head; a fresh workflow run for this repair must be checked before marking CI green. No APK artifact is claimed.
+- **Current state:** Root cause of the visible analyzer failure is fixed in the branch; PR #44 remains open and draft while CI reruns.
+- **Next action:** Verify the new exact-head workflow result; resolve any remaining analyzer, widget-test, or APK build failures before proceeding.
