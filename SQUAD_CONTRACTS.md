@@ -1,45 +1,24 @@
-# Squad Contracts — Premium Restaurant & Café Menu Platform
+# Squad Contracts
 
-> Applies only to Product 2 in this repository.
-> Product 1 has its own independent project and team plan.
+Squads are responsibility boundaries; one person may hold multiple roles.
 
-## 1. Operating model
+## Product Research & Strategy
+Owns interviews, workflow observation, economics, personas, competitor review, PRD, prioritisation and metrics. Must distinguish observed, reported, estimated and hypothetical evidence.
 
-The product owner owns product direction and approves scope. Engineering coordinates architecture, implementation, integration, quality, and release. Squads are workstreams with explicit ownership and contracts.
+## Restaurant Domain
+Owns restaurant menus, tables, waitlists, orders, kitchen/fulfilment, staff workflows and analytics. Must define state machines, role matrix, exceptions and acceptance evidence. Does not own cinema semantics.
 
-No squad may silently expand scope or assume unapproved hospitality workflows.
+## Cinema Domain
+Owns films, showtimes, auditoriums, seat inventory, holds, bookings, tickets, admission, concessions and cinema analytics. Must define concurrency invariants, ticket security, schedule rules and exception handling.
 
-## 2. Squad map
+## Experience & Design
+Owns guest, staff and manager UX, design system, accessibility, responsive behaviour and content. Must deliver tested prototypes and explicit loading/error/offline states.
 
-| Squad | Mission | Owns |
-|---|---|---|
-| Product & Research | Validate target hospitality segment | Interviews, requirements, prioritization, acceptance criteria |
-| Experience & Design | Deliver premium guest and operator UX | Research, information architecture, design system, prototypes, accessibility |
-| Restaurant Workspace | Build authenticated management experience | Owner/staff flows, menu editing, preview, publishing controls |
-| Guest Experience | Build public digital menu | QR landing, mobile menu, visual presentation, performance |
-| Platform & Data | Build secure platform services | Domain model, API, database, auth, media, publishing, analytics |
-| QA & Reliability | Prove release quality | Automation, security, performance, browser/device tests, pilot validation |
+## Platform & Integrations
+Owns identity, tenancy, roles, API standards, data platform, audit, notifications, payment/provider adapters, CI/CD and observability. Must deliver ADRs, contracts, threat model, migrations and integration tests.
 
-## 3. Contract rules
+## QA, Security & Reliability
+Owns test strategy, threat testing, concurrency, performance, accessibility, failure injection, release gates and incident readiness. Must provide reproducible evidence and release recommendation.
 
-1. Requirements and designs are approved before implementation.
-2. API and domain contracts are agreed before client integration.
-3. Guest-facing screens use only public, published data.
-4. Protected operations enforce server-side restaurant/location membership.
-5. Media and QR flows have explicit acceptance tests.
-6. Every pull request includes tests and evidence appropriate to its risk.
-7. QA independently verifies critical workflows.
-8. No feature is complete solely because the implementing squad reports success.
-
-## 4. Required outputs
-
-- Product & Research: validated PRD, personas, opportunity map, release scope.
-- Experience & Design: sitemap, flows, design system, prototype, accessibility rules.
-- Restaurant Workspace: integrated management workflows and automated tests.
-- Guest Experience: responsive public menu, performance evidence, browser tests.
-- Platform & Data: approved schema, API contracts, migrations, security tests.
-- QA & Reliability: traceable test plan, defect reports, regression evidence, release recommendation.
-
-## 5. Independence from Product 1
-
-Do not reuse Product 1's free local-shop workflows, offline-first data assumptions, code, or backend without a documented review and explicit approval.
+## Cross-squad contract
+Every task states problem, business outcome, domain owner, dependencies, acceptance criteria, test evidence, risks and docs to update. Cross-domain changes require both domain owners and Platform review. No squad may weaken a domain invariant for implementation convenience.
