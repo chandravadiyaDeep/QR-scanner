@@ -1,47 +1,18 @@
-# Business Model — Reserved for the 10,000-Shop Milestone
+# Business Model — Decisions Reserved
 
-> **Status: RESERVED — do not activate, implement, or use for current product decisions.**
+The product serves exactly two verticals: restaurants and cinemas. Pricing must reflect each vertical's operating economics and verified value.
 
-## Purpose
+## Not decided
+No approved prices, plans, free limits, trial duration, transaction fees, setup fees, hardware charges, support/SLA commitments, revenue share or free-until-X-customer promise. Do not invent or hard-code these.
 
-This document is a holding place for future business-model research and decisions. The current product stage is focused on building, distributing, learning from real usage, and reaching the milestone of **10,000 onboarded shops**.
+## Value hypotheses to measure
+**Restaurants:** staff time spent taking/re-entering orders; queue abandonment; table turn time; mistakes/remakes/refunds; throughput; current POS, printer, QR and payment costs.
 
-No pricing, subscriptions, paid plans, advertising, transaction fees, commissions, or other monetization mechanisms are approved by this document.
+**Cinemas:** ticket-counter staffing; booking abandonment; entry validation time; ticket errors/fraud; concession queue abandonment; concession attachment; current ticketing, scanner, POS and payment costs.
 
-## Current commitment
+Possible per-location subscription, usage-based, setup/integration or hybrid pricing are research hypotheses only.
 
-Until the 10,000-shop milestone is reached:
+## Approval requirements
+Interview buyers; identify budget owner; calculate venue-specific value; include provider fees, hosting, messaging, hardware, support and integration costs; test willingness to pay; model venue sizes separately; define cancellation, export, support and service commitments; obtain explicit approval before publishing prices.
 
-- Keep the combined MVP + V1 feature set free for shops.
-- Do not introduce paid gates or monetization friction into the product.
-- Do not build billing, subscription, payment collection, or commercial-plan enforcement as part of the current scope.
-- Prioritize product usability, reliability, accessibility, onboarding, and genuine shop adoption.
-- Measure and report shop adoption consistently so the milestone can be evaluated.
-
-## Milestone definition to validate
-
-The target is 10,000 shops. Before declaring it reached, the project should define what counts as an onboarded shop. A recommended future measurement rule is a distinct shop account with a completed profile and at least one published, customer-accessible menu. Test accounts, duplicate accounts, abandoned drafts, and internal demos should not count.
-
-The precise metric, verification method, and reporting owner must be confirmed before the milestone is used to activate any business-model decisions.
-
-## Future business-model research
-
-When the milestone is reached, revisit and document:
-
-1. Hosting, storage, support, and operating costs at actual usage levels.
-2. Shop segments and willingness to pay, validated through conversations and experiments.
-3. Possible pricing structures and which capabilities, if any, belong in paid tiers.
-4. Fair treatment of micro-businesses and low-volume shops.
-5. Payment, tax, invoicing, cancellation, and refund requirements for the markets served.
-6. Unit economics, support capacity, reliability commitments, and sustainability.
-7. A migration plan that protects existing shops and their published menu links.
-
-These are research topics, not commitments or pre-approved features.
-
-## Activation rule
-
-A separate, explicit product/business decision is required after the 10,000-shop milestone has been verified. Reaching the number does **not** automatically authorize a pricing change or monetization launch. The team must review evidence, approve a model, document the impact on existing shops, and communicate any change before implementation.
-
-## Relationship to the product plan
-
-The current scope and release rules live in [PRODUCT_PLAN.md](./PRODUCT_PLAN.md). That plan governs what is being built now. This document is intentionally separate and remains inactive until the milestone review.
+Never promise guaranteed staff reductions or revenue growth. Position automation as reducing repetitive workload and enabling staff to focus on service. Never store raw card data.
