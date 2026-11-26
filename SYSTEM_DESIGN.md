@@ -1,175 +1,85 @@
-# System Design — QR Digital Menu
+# System Design — Premium Restaurant & Café Menu Platform
 
-**Status:** Proposed baseline for implementation  
-**Scope authority:** [PRODUCT_PLAN.md](./PRODUCT_PLAN.md)  
-**Detailed implementation plan:** [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)
+> **Active system direction for Product 2 only.**
+> Scope authority: [PRODUCT_PLAN.md](./PRODUCT_PLAN.md).
+> Detailed candidate architecture: [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md).
 
 ## 1. Product boundary
 
-The product has two separate client experiences:
+The system serves quality-focused restaurants and cafés with an initial target average spend above ₹200 per person.
 
-- **Owner Android app (Flutter):** authenticated shop management.
-- **Customer public menu (Next.js):** anonymous, mobile-first web page opened by scanning a QR code.
+It has two primary experiences:
+- **Restaurant workspace:** authenticated management of restaurant identity, menus, content, publishing, QR assets, and approved insights.
+- **Guest menu:** polished, mobile-first browser experience opened by scanning a QR code.
 
-Customers never need to install the owner app, create an account, or use an app-only deep link. QR codes contain only a stable HTTPS URL: `https://<public-domain>/m/<shop-slug>`.
+This is not Product 1's free offline-first local-shop app.
 
-FastAPI is the trusted application layer. PostgreSQL is the source of truth. Supabase Auth establishes owner identity; FastAPI checks shop membership and role for every owner operation.
-
-## 2. Container architecture
-
-```mermaid
-flowchart LR
-  Owner[Shop owner] --> Flutter[Flutter Android app]
-  Customer[Customer] --> Camera[Phone camera / QR scanner]
-  Camera --> Web[Next.js public menu]
-  Flutter --> Auth[Supabase Auth]
-  Flutter --> API[FastAPI REST API]
-  Web --> API
-  API --> DB[(Supabase PostgreSQL)]
-  API --> Store[Supabase Storage]
-  API --> Metrics[Analytics aggregates]
-```
-
-### Component responsibilities
-
-| Component | Owns | Must not own |
-|---|---|---|
-| Flutter app | Owner UI, session lifecycle, forms, preview, QR rendering and sharing | Privileged secrets, authorization decisions, public menu hosting |
-| Next.js public menu | Public route, rendering, language switch, theme presentation, responsive behavior | Owner writes, privileged database access |
-| FastAPI | Authentication verification, authorization, validation, business rules, publishing, public DTO, analytics | UI rendering |
-| PostgreSQL | Durable relational records, constraints, migrations, RLS defense in depth | Presentation logic |
-| Supabase Storage | Shop logo and menu item assets | Publicly exposing private/unvalidated uploads |
-| QR code | Encodes canonical public URL | Menu data or private identifiers |
-
-## 3. Key interaction flows
-
-### 3.1 Shop onboarding
-
-1. Owner creates an account through Supabase Auth in Flutter.
-2. Flutter receives an access token.
-3. Owner submits shop name, requested slug, default language, and optional public contact details to FastAPI.
-4. FastAPI verifies JWT and creates the shop, owner membership, and primary menu in one database transaction.
-5. API returns shop ID, menu ID, publication state, and canonical public URL.
-6. Shop is initially unpublished.
-
-### 3.2 Menu editing and publishing
-
-1. Flutter requests the owner's editable menu.
-2. FastAPI verifies membership and returns draft categories, items, translations, branding, and theme.
-3. Owner edits content; Flutter sends validated changes to the API.
-4. Owner previews draft through an authenticated preview endpoint.
-5. On publish, FastAPI validates that the shop/menu is publishable and commits the published state.
-6. Public route reads only the published customer-safe projection.
-7. Later edits do not change the shop slug or QR destination.
-
-### 3.3 Customer scan
-
-1. Customer scans the printed QR code using the phone camera or any scanner.
-2. Browser opens `/m/{shop_slug}`.
-3. Next.js requests the public menu DTO.
-4. API returns only published shop/menu content.
-5. Web client renders the selected language, falling back to the shop default language.
-6. A privacy-minimized view event is recorded, with rate limiting and deduplication.
-7. No customer authentication or app installation is requested.
-
-### 3.4 Image upload
-
-1. Owner requests a signed upload URL for a declared asset type and size.
-2. API verifies shop membership and issues a short-lived, shop-scoped upload.
-3. Flutter uploads directly to the configured storage bucket.
-4. Flutter calls upload-complete endpoint.
-5. API verifies object metadata and ownership before attaching the asset path to a shop/menu record.
-6. Public DTO returns a safe image URL or controlled image proxy URL.
-
-## 4. Domain model
+## 2. Provisional context diagram
 
 ```mermaid
-erDiagram
-  AUTH_USER ||--o{ SHOP_MEMBER : joins
-  SHOP ||--o{ SHOP_MEMBER : has
-  SHOP ||--|| MENU : owns
-  MENU ||--o{ CATEGORY : contains
-  CATEGORY ||--o{ MENU_ITEM : contains
-  CATEGORY ||--o{ CATEGORY_TRANSLATION : translated
-  MENU_ITEM ||--o{ MENU_ITEM_TRANSLATION : translated
-  SHOP ||--o{ MENU_VIEW_DAILY : aggregates
-  MENU ||--o{ MENU_VIEW_DAILY : records
+flowchart TD
+  Staff[Restaurant owner / authorized staff] --> Workspace[Restaurant management workspace]
+  Guest[Guest phone camera] --> QR[Restaurant QR code]
+  QR --> Browser[Mobile browser]
+  Browser --> Menu[Premium guest menu]
+  Workspace --> API[Trusted application API]
+  Menu --> API
+  API --> Auth[Authentication and authorization]
+  API --> DB[(Restaurant and menu data)]
+  API --> Media[Image and media delivery]
+  API --> Metrics[Privacy-conscious analytics]
 ```
 
-One shop has one primary menu in this release. Multiple menus, branches, staff invitations, online ordering, checkout, payment processing, loyalty, and AI descriptions are not part of the current release.
+The candidate implementation stack is Flutter, Next.js, FastAPI, and Supabase, subject to product discovery and architecture approval.
 
-## 5. API boundaries
+## 3. Key guest journey
 
-- Base path: `/api/v1`.
-- Owner endpoints require `Authorization: Bearer <Supabase access token>`.
-- Public menu endpoints require no authentication.
-- Owner writes are always authorized server-side by shop membership.
-- Public API returns a dedicated DTO; do not serialize database models directly.
-- Error shape and endpoint schemas are defined in [API_CONTRACTS.md](./API_CONTRACTS.md).
-- Database structure and RLS policies are defined in [DATABASE_SCHEMA.sql](./DATABASE_SCHEMA.sql).
+1. Guest scans a QR code.
+2. A stable HTTPS destination opens in the phone browser.
+3. The restaurant's brand identity and menu appear quickly.
+4. Guest navigates menu sections and item details.
+5. Guest sees current prices, descriptions, images, and verified labels.
+6. The experience remains usable across supported mobile browsers and network conditions.
 
-## 6. Publishing and cache consistency
+No owner app installation or guest account is required to view the menu.
 
-- Draft records are editable by authorized owners.
-- Publishing updates the menu's published state and publication timestamp.
-- Public reads exclude unpublished shops/menus, hidden categories, and archived items.
-- Use a short cache lifetime with explicit revalidation. Initial target: public response cache TTL no more than 60 seconds; successful publish should trigger revalidation/purge where supported.
-- QR URL is immutable under ordinary edits.
-- Unpublishing returns a clear unavailable/not-found public state without leaking draft data.
+## 4. Key management journey
 
-If a later implementation needs atomic snapshots or rollback, add versioned published snapshots as a deliberate schema change; do not add premature versioning to the first migration.
+1. Authorized staff sign in.
+2. The workspace loads the restaurants and locations they are permitted to manage.
+3. Staff edit menu content and presentation.
+4. They preview the guest experience.
+5. Publishing validates and safely releases the intended version.
+6. The public menu receives only the published guest-safe projection.
 
-## 7. Security model
+Exact roles, approval workflows, and multi-location behavior remain discovery decisions.
 
-1. Verify Supabase JWT signature, issuer, audience, and expiry on every protected API request.
-2. Derive user ID from the verified token; never trust user ID or role from request JSON.
-3. Check membership and role for every shop-scoped operation.
-4. Apply PostgreSQL RLS and least-privilege grants as defense in depth.
-5. Never put service-role keys or database credentials in Flutter, public web bundles, or Git.
-6. Public endpoints expose only published fields explicitly allow-listed in DTOs.
-7. Validate file type, size, dimensions, and storage path; use short-lived signed uploads.
-8. Rate-limit public lookups and view-event submissions.
-9. Do not store raw IP addresses, customer identity, or precise location for basic menu analytics.
-10. Log request IDs and safe error metadata, never tokens or sensitive content.
+## 5. Data and API principles
 
-**Important:** If FastAPI connects using a Supabase service-role/database-owner credential, RLS may be bypassed. FastAPI authorization checks are therefore mandatory and must be tested independently.
+- Model restaurant, location, menu, section, item, media, and publication concepts only after approved domain discovery.
+- Keep draft and published representations distinct.
+- Enforce authorization on the server for every protected operation.
+- Use explicit response DTOs for public menu data.
+- Maintain stable QR destinations and version-aware cache invalidation.
+- Design image transformations and caching for visual quality and fast delivery.
 
-## 8. Operational design
+## 6. Reliability and observability
 
-Environments: local development, staging, production. Each environment has separate Supabase project/database, storage bucket, API deployment, and public domain configuration.
+The platform must be testable under realistic service conditions:
+- Slow mobile networks.
+- Sudden network loss and recovery.
+- High-traffic periods.
+- Invalid or expired sessions.
+- Failed image delivery.
+- Stale caches after menu updates.
+- Unauthorized cross-restaurant access.
 
-Required operational capabilities:
-- Health/readiness endpoints.
-- Structured logs with request IDs.
-- API latency/error monitoring.
-- Database backup and restore verification.
-- Storage usage monitoring.
-- CI for Flutter, Next.js, FastAPI, SQL migration validation, and tests.
-- Documented deployment and rollback steps.
+Define service objectives, monitoring, alerting, backup, and rollback plans before production launch.
 
-## 9. Architecture decisions (ADRs)
+## 7. Unapproved capabilities
 
-| ID | Decision | Status |
-|---|---|---|
-| ADR-001 | Flutter for Android owner app | Accepted baseline |
-| ADR-002 | Next.js public customer menu | Accepted baseline |
-| ADR-003 | FastAPI as trusted application API | Accepted baseline |
-| ADR-004 | Supabase PostgreSQL/Auth/Storage | Accepted baseline |
-| ADR-005 | Stable HTTPS slug URL in QR code | Non-negotiable |
-| ADR-006 | Public customer access without account/app | Non-negotiable |
-| ADR-007 | One primary menu per shop for initial release | Accepted scope limit |
-| ADR-008 | No ordering, payments, loyalty, AI or monetization in current release | Scope guardrail |
+Ordering, payments, reservations, table management, POS integrations, loyalty, and other hospitality workflows are not automatically included. Each requires discovery and explicit approval.
 
-## 10. Decision ownership
+## 8. Legacy boundary
 
-The assistant owns implementation details, code, migrations, tests, and integration work. The product owner approves material product-scope changes, user-visible trade-offs, and irreversible external actions. Routine engineering choices within this approved architecture do not require repeated approval.
-
-## 11. Acceptance criteria
-
-- Owner can create and manage a shop only after authentication.
-- A shop owner cannot read or change another shop's private records.
-- Published public menu is accessible from any modern mobile browser without app install.
-- QR URL remains stable after price, category, translation, branding, and theme changes.
-- Unpublished menus are not exposed publicly.
-- Public DTO contains no private owner or internal fields.
-- All endpoints and database constraints have automated tests.
+The former local-shop PRODUCT_PLAN, PR #43 backend foundation, PR #44 Android foundation, old API_CONTRACTS.md, and old DATABASE_SCHEMA.sql belong to Product 1's earlier work. They are not approved dependencies for this system.
