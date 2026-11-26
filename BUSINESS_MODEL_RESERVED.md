@@ -1,43 +1,18 @@
-# Commercial Strategy — Premium Hospitality Platform
+# Business Model — Decisions Reserved
 
-> **Status: UNDECIDED — research before implementation.**
->
-> This document applies only to the premium restaurant and café platform in this repository. It does not inherit Product 1's free-until-10,000-shops commitment.
+The product serves exactly two verticals: restaurants and cinemas. Pricing must reflect each vertical's operating economics and verified value.
 
-## 1. Positioning
+## Not decided
+No approved prices, plans, free limits, trial duration, transaction fees, setup fees, hardware charges, support/SLA commitments, revenue share or free-until-X-customer promise. Do not invent or hard-code these.
 
-The product is intended for quality-focused restaurants, cafés, and hospitality businesses with an initial target average spend above ₹200 per person.
+## Value hypotheses to measure
+**Restaurants:** staff time spent taking/re-entering orders; queue abandonment; table turn time; mistakes/remakes/refunds; throughput; current POS, printer, QR and payment costs.
 
-The positioning is based on guest experience, presentation quality, reliability, and useful operational capabilities—not on an assumed price plan.
+**Cinemas:** ticket-counter staffing; booking abandonment; entry validation time; ticket errors/fraud; concession queue abandonment; concession attachment; current ticketing, scanner, POS and payment costs.
 
-## 2. Decisions not yet approved
+Possible per-location subscription, usage-based, setup/integration or hybrid pricing are research hypotheses only.
 
-The following require customer research, operating-cost analysis, and explicit product-owner approval:
-- Subscription tiers and pricing.
-- Free trial or demo policy.
-- Setup or onboarding fees.
-- Per-location pricing.
-- Usage limits.
-- Support and service-level commitments.
-- Integrations and add-on pricing.
-- Payment collection and billing implementation.
+## Approval requirements
+Interview buyers; identify budget owner; calculate venue-specific value; include provider fees, hosting, messaging, hardware, support and integration costs; test willingness to pay; model venue sizes separately; define cancellation, export, support and service commitments; obtain explicit approval before publishing prices.
 
-## 3. Research required
-
-1. Interview owners and managers across target restaurant and café segments.
-2. Understand current menu workflows, QR usage, update frequency, and guest feedback.
-3. Identify what makes a menu platform worth paying for.
-4. Estimate hosting, image delivery, support, and operational costs.
-5. Test willingness to pay using evidence rather than assumptions.
-6. Evaluate competitor positioning and alternatives.
-7. Define a sustainable offer without compromising guest experience.
-
-## 4. Guardrails
-
-- Do not copy Product 1's 10,000-shop free milestone.
-- Do not add billing or paywalls before approval.
-- Do not assume all premium capabilities should be paid add-ons.
-- Do not promise service levels that have not been engineered and tested.
-- Protect restaurant data and published menu URLs if commercial packaging changes later.
-
-A commercial decision must be documented separately and approved before implementation.
+Never promise guaranteed staff reductions or revenue growth. Position automation as reducing repetitive workload and enabling staff to focus on service. Never store raw card data.
