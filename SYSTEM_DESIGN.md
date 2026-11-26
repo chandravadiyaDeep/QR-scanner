@@ -1,85 +1,40 @@
-# System Design — Premium Restaurant & Café Menu Platform
+# System Design — Restaurant OS and Cinema OS
 
-> **Active system direction for Product 2 only.**
-> Scope authority: [PRODUCT_PLAN.md](./PRODUCT_PLAN.md).
-> Detailed candidate architecture: [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md).
+## Experience model
+One shared account/platform foundation with two differentiated business experiences. Business onboarding selects restaurant or cinema; vocabulary, workflows, permissions and reports remain domain-specific.
 
-## 1. Product boundary
+## Restaurant guest journey
+1. Scan table QR or open venue link.
+2. Confirm correct venue, branch and table context.
+3. Browse current menu, prices, dietary/allergen information and availability.
+4. Add items/options and review.
+5. Submit once and receive accepted, pending or failed state.
+6. Track preparation/ready/served status where enabled.
+7. Request staff assistance at any point.
 
-The system serves quality-focused restaurants and cafés with an initial target average spend above ₹200 per person.
+## Restaurant staff and owner
+Staff see prioritised live orders, route/prepare/update them by role, and handle unavailable items, changes and exceptions with audit history. Managers configure branches, tables, menus, hours and roles; monitor wait, preparation, throughput, cancellations, bottlenecks and adoption.
 
-It has two primary experiences:
-- **Restaurant workspace:** authenticated management of restaurant identity, menus, content, publishing, QR assets, and approved insights.
-- **Guest menu:** polished, mobile-first browser experience opened by scanning a QR code.
+## Cinema guest journey
+1. Open cinema link or QR.
+2. Select film, language/format, date and showtime.
+3. View accurate auditorium seat map.
+4. Select seats and acquire temporary hold.
+5. Complete approved booking/payment flow.
+6. Receive digital ticket with secure validation credential.
+7. Present ticket at entry; optionally pre-order concessions.
 
-This is not Product 1's free offline-first local-shop app.
+## Cinema staff and owner
+Staff scan tickets and see valid, used, cancelled, expired or unknown states distinctly. They resolve exceptions with role checks and audit. Managers configure films, showtimes, auditoriums and seat maps; monitor occupancy, booking conversion, entry throughput, concession attachment, refunds and exceptions.
 
-## 2. Provisional context diagram
+## Shared interaction standards
+Mobile-first, accessible, multilingual-ready; clear confirmation before irreversible actions; no false success while pending; explicit loading/empty/error/retry/offline states; glanceable staff workflows; human support path; no mandatory app installation for core guest journeys.
 
-```mermaid
-flowchart TD
-  Staff[Restaurant owner / authorized staff] --> Workspace[Restaurant management workspace]
-  Guest[Guest phone camera] --> QR[Restaurant QR code]
-  QR --> Browser[Mobile browser]
-  Browser --> Menu[Premium guest menu]
-  Workspace --> API[Trusted application API]
-  Menu --> API
-  API --> Auth[Authentication and authorization]
-  API --> DB[(Restaurant and menu data)]
-  API --> Media[Image and media delivery]
-  API --> Metrics[Privacy-conscious analytics]
-```
+## Operational state machines
+Define allowed transitions, actor permissions, timestamps and audit for restaurant order, payment, kitchen fulfilment, waitlist and seating; cinema seat hold, booking, payment, ticket, admission and concession fulfilment. Never conflate these states.
 
-The candidate implementation stack is Flutter, Next.js, FastAPI, and Supabase, subject to product discovery and architecture approval.
+## Reporting
+Show time window, denominator and data freshness. Separate actuals from estimates. Do not label estimated labour savings as realised savings. Compare baseline and post-adoption periods with comparable days, hours and volumes.
 
-## 3. Key guest journey
-
-1. Guest scans a QR code.
-2. A stable HTTPS destination opens in the phone browser.
-3. The restaurant's brand identity and menu appear quickly.
-4. Guest navigates menu sections and item details.
-5. Guest sees current prices, descriptions, images, and verified labels.
-6. The experience remains usable across supported mobile browsers and network conditions.
-
-No owner app installation or guest account is required to view the menu.
-
-## 4. Key management journey
-
-1. Authorized staff sign in.
-2. The workspace loads the restaurants and locations they are permitted to manage.
-3. Staff edit menu content and presentation.
-4. They preview the guest experience.
-5. Publishing validates and safely releases the intended version.
-6. The public menu receives only the published guest-safe projection.
-
-Exact roles, approval workflows, and multi-location behavior remain discovery decisions.
-
-## 5. Data and API principles
-
-- Model restaurant, location, menu, section, item, media, and publication concepts only after approved domain discovery.
-- Keep draft and published representations distinct.
-- Enforce authorization on the server for every protected operation.
-- Use explicit response DTOs for public menu data.
-- Maintain stable QR destinations and version-aware cache invalidation.
-- Design image transformations and caching for visual quality and fast delivery.
-
-## 6. Reliability and observability
-
-The platform must be testable under realistic service conditions:
-- Slow mobile networks.
-- Sudden network loss and recovery.
-- High-traffic periods.
-- Invalid or expired sessions.
-- Failed image delivery.
-- Stale caches after menu updates.
-- Unauthorized cross-restaurant access.
-
-Define service objectives, monitoring, alerting, backup, and rollback plans before production launch.
-
-## 7. Unapproved capabilities
-
-Ordering, payments, reservations, table management, POS integrations, loyalty, and other hospitality workflows are not automatically included. Each requires discovery and explicit approval.
-
-## 8. Legacy boundary
-
-The former local-shop PRODUCT_PLAN, PR #43 backend foundation, PR #44 Android foundation, old API_CONTRACTS.md, and old DATABASE_SCHEMA.sql belong to Product 1's earlier work. They are not approved dependencies for this system.
+## UX validation
+Test in busy conditions on older devices, small screens and weak networks. Include accessibility, scanning conditions, multilingual content, support and exception handling.
