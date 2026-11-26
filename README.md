@@ -16,11 +16,15 @@ Our mission is to reduce avoidable operating costs and guest friction: queues, m
 
 Shared identity, tenancy, roles, notifications, audit, media and reporting do not erase domain-specific workflows.
 
+## Physical layout and QR identity
+See [PHYSICAL_ASSET_QR_IDENTITY_SYSTEM.md](PHYSICAL_ASSET_QR_IDENTITY_SYSTEM.md) for the separate brainstorming specification covering restaurant tables, cinema seats, bulk layout creation, QR generation, duplex printing, reprinting, credential rotation, recovery and mind maps.
+
 ## Documentation map
 - CURRENT_STATE.md — mandatory handoff and live status.
 - AGENTS.md — rules for every contributor and AI agent.
 - COMMANDS.md — reusable chat command protocol.
 - PRODUCT_PLAN.md — mission, problem map, candidate capabilities and metrics.
+- PHYSICAL_ASSET_QR_IDENTITY_SYSTEM.md — physical table/seat registry and QR identity workflows.
 - DISCOVERY_PLAYBOOK.md — interviews, observation and validation.
 - MVP_SCORECARD.md — prioritisation and MVP gates.
 - SYSTEM_DESIGN.md — guest, staff and manager journeys.
@@ -32,6 +36,6 @@ Shared identity, tenancy, roles, notifications, audit, media and reporting do no
 - BUSINESS_MODEL_RESERVED.md — commercial decisions awaiting evidence.
 
 ## Status
-Vision and documentation reset in progress. No production feature, live pilot, measured savings or deployment is claimed. See CURRENT_STATE.md.
+Vision and discovery documentation are in progress. No production feature, live pilot, measured savings or deployment is claimed. See CURRENT_STATE.md.
 
 Do not add a third target industry or turn this into a generic POS/ERP. Every capability must solve a validated restaurant or cinema problem.
