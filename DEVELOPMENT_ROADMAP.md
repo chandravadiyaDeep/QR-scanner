@@ -1,116 +1,48 @@
-# Development Roadmap — Premium Restaurant & Café Menu Platform
+# Development Roadmap
 
-> Active roadmap for Product 2 only.
-> Scope authority: [PRODUCT_PLAN.md](./PRODUCT_PLAN.md).
-> Architecture direction: [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md).
+Deliver complete vertical slices, not disconnected screens. Discovery precedes broad implementation.
 
-## Delivery philosophy
+## Phase 0 — Repository alignment
+Establish source-of-truth docs, inspect branches/PRs/CI, isolate legacy work, define chat-portable operating protocol.
+**Exit:** verified project state, active branch and risk list.
 
-This product is intentionally quality-led. Do not rush into CRUD implementation before validating the target customer, guest experience, domain model, and non-functional requirements.
+## Phase 1 — Customer discovery
+Separate restaurant and cinema tracks. Interview owners, managers, frontline staff and guests; observe normal and peak periods; map current workflows and exceptions; quantify staff time, queueing, errors, abandonment and existing software costs; review existing systems.
+**Exit:** evidence-backed problem statements, personas, workflow maps, baseline metrics and pilot candidates.
 
-The roadmap is gated. Each phase must have evidence before the next phase expands scope.
+## Phase 2 — PRD and MVP
+Prioritise by frequency, cost, severity, evidence, feasibility and risk. Select one complete workflow per vertical. Define in/out scope, acceptance criteria, privacy, support and measurable pilot outcomes.
+**Exit:** approved PRD and pilot success criteria.
 
-## Phase 0 — Product separation and repository reset
+## Phase 3 — UX prototype
+Create sitemap, design system and high-fidelity guest/staff/manager prototypes for both verticals. Test accessibility, language, devices and network conditions.
+**Exit:** tested prototype and approved interaction contracts.
 
-- Establish this repository as Product 2 only.
-- Keep Product 1 in its own independent project.
-- Mark Product 1's old PRs, code, schema, and assumptions as legacy.
-- Establish the new product brief and decision log.
+## Phase 4 — Architecture and risk proof
+Domain models, state machines, API contracts, ADRs, threat model, tenant isolation, restaurant idempotent-order proof, cinema concurrent-seat-hold proof, provider integration review, load and recovery tests.
+**Exit:** approved architecture and risk register.
 
-Exit gate: no ambiguity about which product this repository serves.
+## Phase 5 — Shared platform
+Identity, tenancy, roles, audit, media, notification/configuration foundations, CI/CD, observability, migrations and backups.
+**Exit:** tested platform with tenant-isolation evidence.
 
-## Phase 1 — Customer and market discovery
+## Phase 6 — Restaurant vertical slice
+Build only the approved pilot workflow end-to-end, including guest, staff, manager, API, data, notifications, analytics and exception paths.
+**Exit:** acceptance-tested restaurant pilot.
 
-- Interview restaurant owners, café owners, managers, and guests.
-- Validate the ₹200+ average-spend target segment.
-- Understand current menu, QR, and service workflows.
-- Identify high-value pain points and purchase drivers.
-- Review competitor experiences and alternatives.
-- Prioritize capabilities by guest value and operational value.
+## Phase 7 — Cinema vertical slice
+Build only the approved pilot workflow end-to-end. Seat inventory and ticket validation require concurrency, replay and abuse testing.
+**Exit:** acceptance-tested cinema pilot.
 
-Deliverables: research summary, personas, jobs-to-be-done, opportunity map, prioritized requirements.
+## Phase 8 — Controlled pilots
+Onboard selected venues with support plan; measure baseline/post-launch; review incidents, adoption, staff feedback and guest completion.
+**Exit:** evidence-backed operational value review.
 
-Exit gate: product owner approves the target users and initial release scope.
+## Phase 9 — Commercial readiness
+Approve pricing, contracts, support and SLAs; harden integrations, exports and incident response; expand only after pilot gates.
 
-## Phase 2 — Guest experience and design system
+## Prioritisation
+Score impact, frequency, pain, evidence confidence, strategic fit, feasibility, risk and dependency load. Safety, financial and concurrency blockers cannot be averaged away.
 
-- Define guest menu information architecture.
-- Map QR-to-menu guest journey.
-- Create high-fidelity mobile-first screens.
-- Define typography, color, spacing, image, motion, and accessibility rules.
-- Prototype restaurant workspace flows.
-- Test prototypes with target users.
-
-Deliverables: sitemap, user flows, design system, interactive prototype, usability findings.
-
-Exit gate: design quality and usability approved before large-scale implementation.
-
-## Phase 3 — Domain and architecture design
-
-- Define restaurant/location/menu domain boundaries.
-- Decide menu, section, item, translation, media, and publication models.
-- Decide staff roles and authorization.
-- Define public and authenticated API contracts.
-- Design data isolation, caching, media delivery, and observability.
-- Define performance, accessibility, security, backup, and recovery targets.
-
-Deliverables: architecture decision records, ERD, API contract, threat model, test strategy.
-
-Exit gate: technical design reviewed and approved.
-
-## Phase 4 — Engineering foundation
-
-- Set up application structure and environments.
-- Configure CI and code quality gates.
-- Establish database migration workflow.
-- Add authentication and tenant authorization.
-- Add observability and error reporting.
-- Build design-system primitives.
-
-Exit gate: secure foundation with automated tests and reproducible deployment.
-
-## Phase 5 — Vertical product slices
-
-Implement in end-to-end slices, not disconnected mock screens:
-1. Restaurant onboarding and workspace access.
-2. Menu structure and content management.
-3. Media upload and optimized guest delivery.
-4. Preview and safe publishing.
-5. Public guest menu and stable QR destination.
-6. Approved language, branding, and discovery-prioritized capabilities.
-7. Approved analytics and integrations, if included.
-
-Each slice requires API, UI, tests, documentation, and acceptance evidence.
-
-## Phase 6 — Quality engineering
-
-- Unit, contract, integration, and end-to-end tests.
-- Cross-tenant security testing.
-- Browser and device matrix.
-- Accessibility audit.
-- Performance and load testing.
-- Image and cache regression testing.
-- Failure-mode and recovery testing.
-- Real restaurant pilot testing.
-
-Exit gate: all release-blocking defects closed and acceptance metrics met.
-
-## Phase 7 — Controlled pilot and release
-
-- Onboard a small group of target restaurants.
-- Observe actual service-hour usage.
-- Collect owner and guest feedback.
-- Measure menu load and reliability.
-- Fix defects and refine onboarding.
-- Prepare versioned production release and rollback plan.
-
-Do not declare launch readiness from CI alone.
-
-## Operating rules
-
-- Use GitHub issues, feature branches, pull requests, and GitHub Actions.
-- Keep work in small reviewable vertical slices.
-- Do not merge Product 1 code or PRs into this product.
-- Update CURRENT_STATE.md after every meaningful task.
-- Do not invent requirements when discovery is incomplete.
-- Product owner approves material scope and commercial decisions.
+## Release gates
+Tests, security review, migration/rollback, monitoring, support runbook, accessibility, load evidence for critical flows, pilot acceptance and truthful release notes.
