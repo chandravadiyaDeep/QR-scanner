@@ -1,16 +1,14 @@
--- PREMIUM HOSPITALITY PLATFORM — DATABASE SCHEMA STATUS
+-- DATABASE SCHEMA STATUS: NOT APPROVED — DO NOT APPLY.
+-- This platform has two separate business domains: restaurant and cinema.
+-- Do not revive the legacy local-shop schema or create generic tables before
+-- discovery, domain modelling, state machines, threat modelling and approval.
 --
--- IMPORTANT:
--- The SQL schema that previously occupied this file belonged to Product 1,
--- the free local-shop digital menu app. It is NOT approved for Product 2.
+-- Required design outputs:
+-- 1. Shared identity, tenant, membership and role model with tenant isolation.
+-- 2. Restaurant entities and constraints: tables, menus, waitlists, orders, kitchen.
+-- 3. Cinema entities and constraints: auditoriums, seats, showtimes, holds, bookings,
+--    tickets, admission and concessions.
+-- 4. Idempotency, audit, retention, indexes and concurrency strategy.
+-- 5. RLS/permission tests, migration/rollback plan and load-test evidence.
 --
--- Do not apply this file to a Product 2 database.
--- Do not reuse its tables or policies without a reviewed domain design.
---
--- Product 2 schema work must follow:
---   1. Approved restaurant/location/menu domain model.
---   2. Threat model and tenant-isolation design.
---   3. Reviewed ERD and migration plan.
---   4. Automated migration, RLS, and cross-tenant tests.
---
--- This placeholder intentionally contains no executable DDL.
+-- Intentionally comments-only until schema approval.
